@@ -13,6 +13,10 @@
 #import "AppDelegate.h"
 #import "HelpPageViewController.h"
 
+#define kShadowOffsetY (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 4.0f : 2.0f)
+#define kShadowBlur (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 0.5f : 5.0f)
+#define kStrokeSize (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 6.0f : 3.0f)
+
 @interface HomepageViewController ()
 
 @property (strong, nonatomic) IBOutlet UILabel *confirm_time;
@@ -83,6 +87,7 @@
     self.label.numberOfLines = 2;
     self.label.highlighted = YES;
     self.label.highlightedTextColor = [UIColor whiteColor];
+    
     [self.view addSubview:self.label];
     
     
@@ -236,6 +241,7 @@
     self.label.numberOfLines = 2;
     self.label.highlighted = YES;
     self.label.highlightedTextColor = [UIColor whiteColor];
+    
     [self.view addSubview:self.label];
 }
 
@@ -331,6 +337,7 @@
     self.label.highlighted = YES;
     self.label.highlightedTextColor = [UIColor whiteColor];
     [self.label setFrame:CGRectMake(84, 208, 280, 62)];
+    
 }
 
 - (IBAction)helpPageAction:(id)sender {

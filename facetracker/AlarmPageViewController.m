@@ -110,6 +110,10 @@
     [self.Switch setImage:switchT];
     [self.view addSubview:self.Switch];
     
+    NSLog(@"%@",self.delegate.twitterSwitch);
+    if(![self.delegate.twitterSwitch  isEqual: @"off"]){
+        [self sendTime];
+    }
     //[self sendTime];
     
 //    delegate.thread = [[NSThread alloc]initWithTarget:self selector:@selector(startTheBackgroundJob) object:nil];
@@ -124,14 +128,49 @@
     NSString * urlStr = [NSString stringWithFormat:@"http://172.17.252.186:8080/_OyE/SaveUser"];
 //    NSString * urlStr = [NSString stringWithFormat:@"http://localhost:8080/_OyE/SaveUser"];
     
-    NSString *body = [NSString stringWithFormat:@"time=%@&twitterColock=%@&confirm_time=%@&song_name=%@&twitterText=%@",self.delegate.send_time,self.delegate.twitterSwitch,self.delegate.confirm_time,self.delegate.song_name,self.delegate.twitterText];
+    twitter_username = @"";
+    [self userHasAccessToTwitter];
+    if(![twitter_username isEqual:@""]){
+        NSString *body = [NSString stringWithFormat:@"time=%@&twitterColock=%@&confirm_time=%@&song_name=%@&twitterText=%@",self.delegate.send_time,self.delegate.twitterSwitch,self.delegate.confirm_time,self.delegate.song_name,self.delegate.twitterText];
+        
+        //第一步，创建url
+        NSURL *url = [NSURL URLWithString:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/"];
+        //第二步，创建请求
+        NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+        //第三步，连接服务器
+        NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    }
+    
+}
 
-    //第一步，创建url
-    NSURL *url = [NSURL URLWithString:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/"];
-    //第二步，创建请求
-    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    //第三步，连接服务器
-    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+- (BOOL)userHasAccessToTwitter
+{
+    //    return [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
+    //查数据库，没有表建立新表，有表查用户名，没有用户名跳转页面。
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documents = [paths objectAtIndex:0];
+    NSString *database_path = [documents stringByAppendingPathComponent:@"oye.sqlite"];
+    
+    if (sqlite3_open([database_path UTF8String], &db) != SQLITE_OK) {
+        sqlite3_close(db);
+    } else {
+    }
+    
+    NSString *sqlQuery = @"SELECT * FROM person WHERE id=1";
+    sqlite3_stmt * statement;
+    
+    if (sqlite3_prepare_v2(db, [sqlQuery UTF8String], -1, &statement, nil) == SQLITE_OK) {
+        if(sqlite3_step(statement) == SQLITE_ROW) {
+            char *name = (char*)sqlite3_column_text(statement, 1);
+            NSString *nsNameStr = [[NSString alloc]initWithUTF8String:name];
+            
+            twitter_username = nsNameStr;
+            sqlite3_close(db);
+            sqlite3_finalize(statement);
+        } else {
+        }
+    }
+    sqlite3_close(db);
     
 }
 
