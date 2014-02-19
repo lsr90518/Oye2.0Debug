@@ -76,6 +76,8 @@
         [self execSql:sqlCreateTable];
         NSLog(@"database created");
         
+    } else {
+        NSLog(@"database not created");
     }
     
     
@@ -102,10 +104,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    if(![self.player isPlaying]){
-        
-    } else {
-        
+    if([[UIApplication sharedApplication] applicationIconBadgeNumber] > 0){
         DemoVideoCaptureViewController *demoViewCaptureViewController = [[DemoVideoCaptureViewController alloc]init];
         [self.window setRootViewController:demoViewCaptureViewController];
         [self.window makeKeyAndVisible];
@@ -124,13 +123,12 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    
+    [[UIApplication sharedApplication] cancelLocalNotification:self.notify];
+    
     DemoVideoCaptureViewController *demoVideoCaptureViewController = [[DemoVideoCaptureViewController alloc]init];
-    //self.twitterSwitch = @"off";
     [self.window setRootViewController:demoVideoCaptureViewController];
-    //[self.viewController presentViewController:demoVideoCaptureViewController animated:NO completion:nil];
     [self.window makeKeyAndVisible];
-//    NSNotificationCenter *noti = [NSNotificationCenter defaultCenter];
-//    [noti addObserver:self selector:@selector(dismiss) name:@"back" object:nil];
 }
 
 - (NSString *) getCurrentTime{
@@ -192,6 +190,29 @@
         }
     }
     sqlite3_close(database);
+}
+
+-(int)compareOneDay:(NSDate *)oneDay withAnotherDay:(NSDate *)anotherDay
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"dd-MM-yyyy hh:mm:ss"];
+    NSString *oneDayStr = [dateFormatter stringFromDate:oneDay];
+    NSString *anotherDayStr = [dateFormatter stringFromDate:anotherDay];
+    NSDate *dateA = [dateFormatter dateFromString:oneDayStr];
+    NSDate *dateB = [dateFormatter dateFromString:anotherDayStr];
+    NSComparisonResult result = [dateA compare:dateB];
+    NSLog(@"date1 : %@, date2 : %@", oneDay, anotherDay);
+    if (result == NSOrderedDescending) {
+        //NSLog(@"Date1  is in the future");
+        return 1;
+    }
+    else if (result == NSOrderedAscending){
+        //NSLog(@"Date1 is in the past");
+        return -1;
+    }
+    //NSLog(@"Both dates are the same");
+    return 0;
+    
 }
 
 @end

@@ -107,29 +107,8 @@ const int kHaarOptions =  CV_HAAR_FIND_BIGGEST_OBJECT | CV_HAAR_DO_ROUGH_SEARCH;
     [delegate.thread start];
     
     
-    
-    //[NSThread detachNewThreadSelector:@selector(startTheBackgroundJob) toTarget:self withObject:nil];
 }
 
-- (void)sendTwitterClock{
-    NSString * urlStr = [NSString stringWithFormat:@"http://172.17.252.186:8080/_OyE/ChangeTwitterClock"];
-//    NSString * urlStr = [NSString stringWithFormat:@"http://localhost:8080/_OyE/ChangeTwitterClock"];
-    NSURL * url = [NSURL URLWithString:urlStr];
-    NSString *body = [NSString stringWithFormat:@"time=%@&twitterColock=%@",delegate.send_time,delegate.twitterSwitch];
-    
-    //    NSString *body = [NSString stringWithFormat:@"time=%d",sendTime];
-    
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:[body dataUsingEncoding: NSUTF8StringEncoding]];
-    
-    NSURLConnection *theConnection=[[NSURLConnection alloc] initWithRequest:request delegate:self];
-    
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(returnString);
-}
 
 - (void)viewDidUnload
 {

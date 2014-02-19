@@ -8,12 +8,15 @@
 
 #import "SharePageViewController.h"
 #import "HomepageViewController.h"
+#import "AppDelegate.h"
 #import <Twitter/TWTweetComposeViewController.h>
 #import <Twitter/Twitter.h>
 
 #import "AppDelegate.h"
 
 @interface SharePageViewController ()
+
+@property (retain,nonatomic)AppDelegate *delegate;
 
 @end
 
@@ -32,6 +35,22 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+    
+    self.delegate = [[UIApplication sharedApplication]delegate];
+    
+    if([self.delegate.twitterSwitch isEqualToString:@"on"]){
+        //测试服务器
+        NSString *urlStr = [NSString stringWithFormat:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/changeClock?screenname=%@",self.delegate.twitter_name];
+        NSURL *url = [NSURL URLWithString:urlStr];
+        
+        //第二步，通过URL创建网络请求
+        NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+        //NSURLRequest初始化方法第一个参数：请求访问路径，第二个参数：缓存协议，第三个参数：网络请求超时时间（秒）
+        
+        //第三步，连接服务器
+        NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    }
 }
 - (IBAction)openTwitter:(id)sender {
     

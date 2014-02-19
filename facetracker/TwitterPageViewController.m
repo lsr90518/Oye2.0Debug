@@ -105,12 +105,16 @@
             NSString *nsNameStr = [[NSString alloc]initWithUTF8String:name];
             
             twitter_username = nsNameStr;
+            NSLog(@"twitter_name = %@",twitter_username);
             sqlite3_close(db);
             sqlite3_finalize(statement);
+            return YES;
         } else {
+            return NO;
         }
     }
     sqlite3_close(db);
+    return NO;
     
 }
 
@@ -139,27 +143,20 @@
 
 -(void) turnToOn{
     
+    AppDelegate *delegate = [[UIApplication sharedApplication]delegate];
     
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.3];
+    [UIView animateWithDuration:0.3
+                     animations:^{
+                         self.Text.alpha = 0.0;
+                         self.Text.frame = CGRectMake(20, 100, 280, self.view.frame.size.height*0.2);
+                     }
+                     completion:^(BOOL finished){
+                         [self letterToggle:@"on"];
+                     }];
     
-    if (![self userHasAccessToTwitter]) {
-        
-//        TWTweetComposeViewController *t = [[TWTweetComposeViewController alloc]init];
-//        [t setInitialText:@"アカウントの設定をしてください。"];
-//        [self presentViewController:t animated:YES completion:nil];
-        
-        [UIView animateWithDuration:0.3
-                         animations:^{
-                             self.Text.alpha = 0.0;
-                             self.Text.frame = CGRectMake(20, 100, 280, self.view.frame.size.height*0.2);
-                         }
-                         completion:^(BOOL finished){
-                             [self letterToggle:@"on"];
-                         }];
-        
-        
-        AppDelegate *delegate = [[UIApplication sharedApplication]delegate];
+    if ([self userHasAccessToTwitter]) {
         delegate.twitterSwitch = @"on";
         delegate.twitterText = self.Text.text;
         
@@ -180,10 +177,12 @@
         NSData* jsonData = [str dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *result = [jsonData objectFromJSONData];
         NSString *message = [result valueForKey:@"message"];
+        NSLog(@"message = %@",message);
         if([message  isEqual: @"yes"]){
             
             delegate.twitterSwitch = @"on";
             delegate.twitterText = self.Text.text;
+            delegate.twitter_name = twitter_username;
             
         } else {
         //
@@ -194,21 +193,11 @@
         [self presentViewController:twitterCheckViewController animated:YES completion:nil];
         }
     } else {
-    
-        
-        [UIView animateWithDuration:0.3
-                         animations:^{
-                             self.Text.alpha = 0.0;
-                             self.Text.frame = CGRectMake(20, 100, 280, self.view.frame.size.height*0.2);
-                         }
-                         completion:^(BOOL finished){
-                             [self letterToggle:@"on"];
-                         }];
-        
-        
-        AppDelegate *delegate = [[UIApplication sharedApplication]delegate];
-        delegate.twitterSwitch = @"on";
         delegate.twitterText = self.Text.text;
+        
+        TwitterCheckViewController *twitterCheckViewController = [[TwitterCheckViewController alloc]init];
+        twitterCheckViewController.modalTransitionStyle=UIModalTransitionStyleCrossDissolve;
+        [self presentViewController:twitterCheckViewController animated:YES completion:nil];
     }
     
 }

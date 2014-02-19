@@ -64,6 +64,12 @@
 
 @property (retain,nonatomic) NSString *send_time;
 
+@property (retain,nonatomic) UILocalNotification *notify;
+
+@property (retain,nonatomic) NSString *waiting_time;
+
+@property (retain,nonatomic) NSString *twitter_name;
+
 - (NSString *) getCurrentTime;
 
 @end

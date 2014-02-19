@@ -10,12 +10,13 @@
 #import <UIKit/UIKit.h>
 
 @interface AlarmPageViewController : UIViewController{
-    UILocalNotification *notify;
+    
     sqlite3 *db;
     NSString *twitter_username;
     int sendTime;
     
-    
 }
+
+@property (strong,nonatomic) NSMutableData *receiveData;
 
 @end

@@ -41,7 +41,6 @@
 {
     [super viewDidLoad];
     self.delegate = [[UIApplication sharedApplication]delegate];
-    NSLog(@"alarm1=%@",self.delegate.song_name);
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     
     [formatter setDateFormat:@"HH"];
@@ -89,19 +88,18 @@
     //start local notification
     
     NSString *song_nameT = [self.delegate.song_name stringByAppendingString:@".mp3"];
-    NSLog(@"song_nameT==============%@",song_nameT);
     
-    notify = [[UILocalNotification alloc] init];
+    self.delegate.notify = [[UILocalNotification alloc] init];
 //    notify.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
-    notify.fireDate = [NSDate dateWithTimeIntervalSinceNow:interval];
-    notify.soundName = song_nameT;
-    notify.applicationIconBadgeNumber = 1;
-    notify.alertBody = @"Open Your Eyes!";
-    notify.alertAction =@"Open Your Eyes!";
+    self.delegate.notify.fireDate = [NSDate dateWithTimeIntervalSinceNow:interval];
+    self.delegate.notify.soundName = song_nameT;
+    self.delegate.notify.applicationIconBadgeNumber = 1;
+    self.delegate.notify.alertBody = @"Open Your Eyes!";
+    self.delegate.notify.alertAction =@"Open Your Eyes!";
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate); //一回マナーする
-    [[UIApplication sharedApplication] scheduleLocalNotification:notify];
+    [[UIApplication sharedApplication] scheduleLocalNotification:self.delegate.notify];
     
-    //[NSTimer scheduledTimerWithTimeInterval:7 target:self selector:@selector(sendTwitter) userInfo:nil repeats:NO];
+    
     
     
     //スイッチ設置する
@@ -110,75 +108,74 @@
     [self.Switch setImage:switchT];
     [self.view addSubview:self.Switch];
     
-    NSLog(@"%@",self.delegate.twitterSwitch);
     if(![self.delegate.twitterSwitch  isEqual: @"off"]){
         [self sendTime];
     }
-    //[self sendTime];
-    
-//    delegate.thread = [[NSThread alloc]initWithTarget:self selector:@selector(startTheBackgroundJob) object:nil];
-//    [delegate.thread start];
-    
-//    [self performSelectorOnMainThread:@selector(startTheBackgroundJob) withObject:nil waitUntilDone:YES];
     
 }
 
 
 - (void)sendTime{
-    NSString * urlStr = [NSString stringWithFormat:@"http://172.17.252.186:8080/_OyE/SaveUser"];
-//    NSString * urlStr = [NSString stringWithFormat:@"http://localhost:8080/_OyE/SaveUser"];
     
-    twitter_username = @"";
-    [self userHasAccessToTwitter];
     if(![twitter_username isEqual:@""]){
-        NSString *body = [NSString stringWithFormat:@"time=%@&twitterColock=%@&confirm_time=%@&song_name=%@&twitterText=%@",self.delegate.send_time,self.delegate.twitterSwitch,self.delegate.confirm_time,self.delegate.song_name,self.delegate.twitterText];
+        NSString *body = [NSString stringWithFormat:@"time=%@&twitterClock=%@&confirm_time=%@&song_name=%@&twitterText=%@&screenname=%@",self.delegate.send_time,self.delegate.twitterSwitch,self.delegate.confirm_time,self.delegate.song_name,self.delegate.twitterText,self.delegate.twitter_name];
         
         //第一步，创建url
-        NSURL *url = [NSURL URLWithString:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/"];
+        NSURL *url = [NSURL URLWithString:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/SetClock"];
+        
         //第二步，创建请求
-        NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+        NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+        [request setHTTPMethod:@"POST"];
+        NSString *str = @"type=focus-c";
+        NSData *data = [body dataUsingEncoding:NSUTF8StringEncoding];
+        [request setHTTPBody:data];
         //第三步，连接服务器
         NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     }
     
 }
 
-- (BOOL)userHasAccessToTwitter
+//接收到服务器回应的时候调用此方法
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
-    //    return [SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter];
-    //查数据库，没有表建立新表，有表查用户名，没有用户名跳转页面。
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documents = [paths objectAtIndex:0];
-    NSString *database_path = [documents stringByAppendingPathComponent:@"oye.sqlite"];
-    
-    if (sqlite3_open([database_path UTF8String], &db) != SQLITE_OK) {
-        sqlite3_close(db);
-    } else {
-    }
-    
-    NSString *sqlQuery = @"SELECT * FROM person WHERE id=1";
-    sqlite3_stmt * statement;
-    
-    if (sqlite3_prepare_v2(db, [sqlQuery UTF8String], -1, &statement, nil) == SQLITE_OK) {
-        if(sqlite3_step(statement) == SQLITE_ROW) {
-            char *name = (char*)sqlite3_column_text(statement, 1);
-            NSString *nsNameStr = [[NSString alloc]initWithUTF8String:name];
-            
-            twitter_username = nsNameStr;
-            sqlite3_close(db);
-            sqlite3_finalize(statement);
-        } else {
-        }
-    }
-    sqlite3_close(db);
-    
+    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+    NSLog(@"%@",[res allHeaderFields]);
+    self.receiveData = [NSMutableData data];
+}
+//接收到服务器传输数据的时候调用，此方法根据数据大小执行若干次
+-(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    [self.receiveData appendData:data];
+}
+//数据传完之后调用此方法
+-(void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    NSString *receiveStr = [[NSString alloc]initWithData:self.receiveData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@",receiveStr);
+}
+//网络请求过程中，出现任何错误（断网，连接超时等）会进入此方法
+-(void)connection:(NSURLConnection *)connection
+ didFailWithError:(NSError *)error
+{
+    NSLog(@"%@",[error localizedDescription]);
 }
 
 - (void)cancel {
-    [[UIApplication sharedApplication] cancelLocalNotification:notify];
+    [[UIApplication sharedApplication] cancelLocalNotification:self.delegate.notify];
     self.delegate = [[UIApplication sharedApplication]delegate];
     self.delegate.twitterSwitch=@"off";
     
+    //测试服务器
+    NSString *urlStr = [NSString stringWithFormat:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/changeClock?screenname=%@",self.delegate.twitter_name];
+    NSURL *url = [NSURL URLWithString:urlStr];
+    
+    //第二步，通过URL创建网络请求
+    NSURLRequest *request = [[NSURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    //NSURLRequest初始化方法第一个参数：请求访问路径，第二个参数：缓存协议，第三个参数：网络请求超时时间（秒）
+    
+    //第三步，连接服务器
+    NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+        
     HomepageViewController *homepageViewController = [[HomepageViewController alloc]init];
     
     homepageViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
