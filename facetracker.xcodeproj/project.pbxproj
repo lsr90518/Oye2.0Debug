@@ -26,6 +26,7 @@
 		00E53788142BFEE700F30526 /* DemoVideoCaptureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 00E53786142BFEE600F30526 /* DemoVideoCaptureViewController.xib */; };
 		0294B78B17C50BED0050800A /* ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 0294B78A17C50BED0050800A /* ios.png */; };
 		0294B78F17C50CCA0050800A /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0294B78E17C50CCA0050800A /* icon@2x.png */; };
+		0D051E6018BA48AE000511F9 /* icon_120.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D051E5F18BA48AE000511F9 /* icon_120.png */; };
 		0D24BA4117C9D3320019FD82 /* 00.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D24BA2917C9D3310019FD82 /* 00.png */; };
 		0D24BA4217C9D3320019FD82 /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D24BA2A17C9D3310019FD82 /* 01.png */; };
 		0D24BA4317C9D3320019FD82 /* 02.png in Resources */ = {isa = PBXBuildFile; fileRef = 0D24BA2B17C9D3310019FD82 /* 02.png */; };
@@ -169,6 +170,7 @@
 		00E53786142BFEE600F30526 /* DemoVideoCaptureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoVideoCaptureViewController.xib; sourceTree = "<group>"; };
 		0294B78A17C50BED0050800A /* ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ios.png; path = ../ios.png; sourceTree = "<group>"; };
 		0294B78E17C50CCA0050800A /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "../icon@2x.png"; sourceTree = "<group>"; };
+		0D051E5F18BA48AE000511F9 /* icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120.png; sourceTree = "<group>"; };
 		0D24BA2917C9D3310019FD82 /* 00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 00.png; sourceTree = "<group>"; };
 		0D24BA2A17C9D3310019FD82 /* 01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01.png; sourceTree = "<group>"; };
 		0D24BA2B17C9D3310019FD82 /* 02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 02.png; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 		00427A34142B956500E5019E = {
 			isa = PBXGroup;
 			children = (
+				0D051E5F18BA48AE000511F9 /* icon_120.png */,
 				0DB10B4317CC934F0052A86E /* Default-568h@2x.png */,
 				0D24BB8717CC8E020019FD82 /* icon.png */,
 				0D24BB8517CC8DE80019FD82 /* icon@2x.png */,
@@ -694,6 +697,7 @@
 				0D24BA4817C9D3320019FD82 /* 07.png in Resources */,
 				0D24BA4917C9D3320019FD82 /* 08.png in Resources */,
 				0D24BA4A17C9D3320019FD82 /* 09.png in Resources */,
+				0D051E6018BA48AE000511F9 /* icon_120.png in Resources */,
 				0D24BA4B17C9D3320019FD82 /* 10.png in Resources */,
 				0D24BA4C17C9D3320019FD82 /* 11.png in Resources */,
 				0D24BA4D17C9D3320019FD82 /* 12.png in Resources */,
@@ -891,8 +895,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_ENTITLEMENTS = FaceTracker/FaceTracker.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: SONGRAN LIU (GVV2Z2J27L)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: SONGRAN LIU (GVV2Z2J27L)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",

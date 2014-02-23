@@ -146,7 +146,6 @@
     AppDelegate *delegate = [[UIApplication sharedApplication]delegate];
     
     [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.3];
     [UIView animateWithDuration:0.3
                      animations:^{
                          self.Text.alpha = 0.0;
@@ -155,7 +154,7 @@
                      completion:^(BOOL finished){
                          [self letterToggle:@"on"];
                      }];
-    
+    [UIView setAnimationDuration:0.0f];
     if ([self userHasAccessToTwitter]) {
         delegate.twitterSwitch = @"on";
         delegate.twitterText = self.Text.text;

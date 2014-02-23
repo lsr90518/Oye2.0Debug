@@ -105,8 +105,10 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     if([[UIApplication sharedApplication] applicationIconBadgeNumber] > 0){
-        DemoVideoCaptureViewController *demoViewCaptureViewController = [[DemoVideoCaptureViewController alloc]init];
-        [self.window setRootViewController:demoViewCaptureViewController];
+        [[UIApplication sharedApplication] cancelLocalNotification:self.notify];
+        
+        DemoVideoCaptureViewController *demoVideoCaptureViewController = [[DemoVideoCaptureViewController alloc]init];
+        [self.window setRootViewController:demoVideoCaptureViewController];
         [self.window makeKeyAndVisible];
     }
 }
@@ -124,11 +126,11 @@
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
     
-    [[UIApplication sharedApplication] cancelLocalNotification:self.notify];
-    
-    DemoVideoCaptureViewController *demoVideoCaptureViewController = [[DemoVideoCaptureViewController alloc]init];
-    [self.window setRootViewController:demoVideoCaptureViewController];
-    [self.window makeKeyAndVisible];
+//    [[UIApplication sharedApplication] cancelLocalNotification:self.notify];
+//    
+//    DemoVideoCaptureViewController *demoVideoCaptureViewController = [[DemoVideoCaptureViewController alloc]init];
+//    [self.window setRootViewController:demoVideoCaptureViewController];
+//    [self.window makeKeyAndVisible];
 }
 
 - (NSString *) getCurrentTime{
