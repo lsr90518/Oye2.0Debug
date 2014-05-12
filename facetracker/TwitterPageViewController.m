@@ -160,7 +160,7 @@
         delegate.twitterText = self.Text.text;
         
         //测试服务器
-        NSString *urlStr = [NSString stringWithFormat:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/UseTwitter?screenname=%@",twitter_username];
+        NSString *urlStr = [NSString stringWithFormat:@"http://49.212.154.30/OpenYourEyes/UseTwitter?screenname=%@",twitter_username];
         NSURL *url = [NSURL URLWithString:urlStr];
         
         //第二步，通过URL创建网络请求

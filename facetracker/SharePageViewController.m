@@ -41,7 +41,7 @@
     
     if([self.delegate.twitterSwitch isEqualToString:@"on"]){
         //测试服务器
-        NSString *urlStr = [NSString stringWithFormat:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/changeClock?screenname=%@",self.delegate.twitter_name];
+        NSString *urlStr = [NSString stringWithFormat:@"http://49.212.154.30/OpenYourEyes/changeClock?screenname=%@",self.delegate.twitter_name];
         NSURL *url = [NSURL URLWithString:urlStr];
         
         //第二步，通过URL创建网络请求

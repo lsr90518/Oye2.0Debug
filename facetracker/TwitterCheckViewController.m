@@ -33,7 +33,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    NSURL *url = [NSURL URLWithString:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/AuthTwitterClock"];
+    NSURL *url = [NSURL URLWithString:@"http://49.212.154.30/OpenYourEyes/AuthTwitterClock"];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     

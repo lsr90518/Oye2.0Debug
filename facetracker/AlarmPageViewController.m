@@ -90,9 +90,10 @@
     NSString *song_nameT = [self.delegate.song_name stringByAppendingString:@".mp3"];
     
     self.delegate.notify = [[UILocalNotification alloc] init];
-//    notify.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
+//    self.delegate.notify.fireDate = [NSDate dateWithTimeIntervalSinceNow:5];
     self.delegate.notify.fireDate = [NSDate dateWithTimeIntervalSinceNow:interval];
     self.delegate.notify.soundName = song_nameT;
+//    self.delegate.notify.soundName = UILocalNotificationDefaultSoundName;
     self.delegate.notify.applicationIconBadgeNumber = 1;
     self.delegate.notify.alertBody = @"Open Your Eyes!";
     self.delegate.notify.alertAction =@"Open Your Eyes!";
@@ -121,7 +122,7 @@
         NSString *body = [NSString stringWithFormat:@"time=%@&twitterClock=%@&confirm_time=%@&song_name=%@&twitterText=%@&screenname=%@",self.delegate.send_time,self.delegate.twitterSwitch,self.delegate.confirm_time,self.delegate.song_name,self.delegate.twitterText,self.delegate.twitter_name];
         
         //第一步，创建url
-        NSURL *url = [NSURL URLWithString:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/SetClock"];
+        NSURL *url = [NSURL URLWithString:@"http://49.212.154.30/OpenYourEyes/SetClock"];
         
         //第二步，创建请求
         NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
@@ -166,7 +167,7 @@
     self.delegate.twitterSwitch=@"off";
     
     //测试服务器
-    NSString *urlStr = [NSString stringWithFormat:@"http://ll.is.tokushima-u.ac.jp/OpenYourEyes/changeClock?screenname=%@",self.delegate.twitter_name];
+    NSString *urlStr = [NSString stringWithFormat:@"http://49.212.154.30/OpenYourEyes/changeClock?screenname=%@",self.delegate.twitter_name];
     NSURL *url = [NSURL URLWithString:urlStr];
     
     //第二步，通过URL创建网络请求
